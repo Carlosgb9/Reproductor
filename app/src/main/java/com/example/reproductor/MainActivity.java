@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST = 1;
-    private LinearLayout llCurrentSongInfo;
+    private LinearLayout lSongInfo;
     private TextView tvSong, tvArtist, tvCurrentTime, tvTotalTime;
     private ImageButton bPlay, bBack, bNext, bLoop;
     private ListView lvPlayList;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolBar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolBar);
 
-        //llCurrentSongInfo = findViewById(R.id.llCurrentSongInfo);
+        lSongInfo = findViewById(R.id.lSongInfo);
         tvSong = findViewById(R.id.tvSong);
         tvArtist = findViewById(R.id.tvArtist);
         tvCurrentTime = findViewById(R.id.tvCurrentTime);
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (mp == null) {
-            llCurrentSongInfo.setVisibility(View.GONE);
+            lSongInfo.setVisibility(View.GONE);
         } else {
             bPlaySelectedSong(lvPlayList.getSelectedItemPosition());
         }
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
         setSongDataIntoSeekbar(chosenSong);
 
-        llCurrentSongInfo.setVisibility(View.VISIBLE);
+        lSongInfo.setVisibility(View.VISIBLE);
     }
 
     private void checkLoop() { // checks if the "loop" button is active or not
@@ -132,26 +132,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void bOnClickChangeLoop() {
-        if (loop) {
-            bLoop.setColorFilter(getColor(R.color.disabled), PorterDuff.Mode.MULTIPLY);
-        } else {
-            bLoop.setColorFilter(null);
-        }
         loop = !loop;
     }
 
     private void bOnClickPlayPauseSong() {
         if (mp == null) {
-            Toast.makeText(this, getString(R.string.toast_no_song), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.noSong), Toast.LENGTH_SHORT).show();
         } else {
             if (!mp.isPlaying()) {
                 mp.start();
-
-                bPlay.setImageResource(R.drawable.pause_24);
             } else {
                 mp.pause();
-
-                bPlay.setImageResource(R.drawable.play_24);
             }
 
             mp.setOnCompletionListener(arg01 -> checkLoop());
@@ -192,8 +183,6 @@ public class MainActivity extends AppCompatActivity {
         mp = MediaPlayer.create(MainActivity.this, cancion.getSongUri());
         mp.setOnCompletionListener(mediaPlayer -> checkLoop());
         mp.start();
-
-        bPlay.setImageResource(R.drawable.pause_24);
     }
 
     private void setSongDataIntoLayout(Cancion cancion) throws IOException {
@@ -247,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
         String selection = MediaStore.Audio.Media.DURATION + " >= ? AND " + MediaStore.Audio.AudioColumns.DATA + " NOT LIKE ?";
 
         String[] selectionArgs = new String[] {
-                String.valueOf(TimeUnit.MILLISECONDS.convert(2, TimeUnit.MINUTES)), "%/WhatsApp/%"
+                String.valueOf(TimeUnit.MILLISECONDS.convert(1, TimeUnit.SECONDS)), "%/WhatsApp/%"
         };
         String sortOrder = MediaStore.Audio.Media.DISPLAY_NAME + " ASC";
 

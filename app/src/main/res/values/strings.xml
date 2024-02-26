@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Reproductor</string>
+    <string name="noSong">selecciona una canço primer</string>
 </resources>
